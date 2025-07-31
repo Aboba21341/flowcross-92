@@ -1,0 +1,448 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+/* FlowCross Gaming Design System - Максимальная мощь HTML/CSS */
+
+@layer base {
+  :root {
+    /* Черно-белая тема с серыми акцентами */
+    --background: 0 0% 3%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Основные черно-белые цвета FlowCross */
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --primary-glow: 0 0% 90%;
+
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 85%;
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 60%;
+
+  /* Градиенты */
+  --gradient-primary: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 95%));
+  --gradient-secondary: linear-gradient(135deg, hsl(0 0% 20%), hsl(0 0% 15%));
+  --gradient-hero: linear-gradient(135deg, hsl(0 0% 3%) 0%, hsl(0 0% 8%) 50%, hsl(0 0% 12%) 100%);
+  
+  /* Hero анимации */
+  --hero-float: hero-float 6s ease-in-out infinite;
+  --hero-glow: hero-glow 4s ease-in-out infinite alternate;
+    
+    /* Белые эффекты */
+    --neon-white: 0 0 20px hsl(0 0% 100% / 0.3), 0 0 40px hsl(0 0% 100% / 0.1);
+    --neon-gray: 0 0 20px hsl(0 0% 70% / 0.3), 0 0 40px hsl(0 0% 70% / 0.1);
+    
+    /* Тени */
+    --shadow-glow: 0 0 30px hsl(0 0% 100% / 0.2);
+    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.8);
+    --shadow-floating: 0 16px 64px hsl(0 0% 100% / 0.1);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Более интенсивная черно-белая тема */
+    --background: 0 0% 2%;
+    --foreground: 0 0% 98%;
+    
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 2%) 0%, hsl(0 0% 6%) 50%, hsl(0 0% 10%) 100%);
+    --neon-white: 0 0 30px hsl(0 0% 100% / 0.4), 0 0 60px hsl(0 0% 100% / 0.2);
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 280 100% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 280 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+    background: var(--gradient-hero);
+    background-attachment: fixed;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Performance mode styles */
+  .performance-mode .glass-effect {
+    backdrop-filter: none !important;
+    background: hsl(var(--card)) !important;
+  }
+
+  .performance-mode .backdrop-blur-xl,
+  .performance-mode .backdrop-blur-lg,
+  .performance-mode .backdrop-blur-md,
+  .performance-mode .backdrop-blur-sm {
+    backdrop-filter: none !important;
+  }
+
+  /* No animations styles */
+  .no-animations *,
+  .no-animations *::before,
+  .no-animations *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer utilities {
+  /* Неоновые эффекты */
+  .neon-glow {
+    box-shadow: var(--neon-white);
+  }
+  
+  .neon-text {
+    text-shadow: var(--neon-white);
+  }
+  
+  .floating-glow {
+    box-shadow: var(--shadow-floating);
+  }
+  
+  /* Анимированные градиенты */
+  .gradient-border {
+    position: relative;
+    background: var(--gradient-primary);
+    border-radius: var(--radius);
+  }
+  
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: hsl(var(--card));
+    border-radius: calc(var(--radius) - 2px);
+    z-index: 1;
+  }
+  
+  .gradient-border > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Parallax эффекты */
+  .parallax-bg {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  /* Стеклянный эффект */
+  .glass-effect {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+  }
+
+  /* Скругленные блоки секций */
+  .section-block {
+    border-radius: 1.5rem;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+  }
+
+  .section-block-rounded {
+    border-radius: 2rem;
+  }
+  
+  /* 3D эффекты */
+  .transform-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  
+  .rotate-y-6 {
+    transform: rotateY(6deg);
+  }
+  
+  .rotate-x-6 {
+    transform: rotateX(6deg);
+  }
+
+  /* Продвинутые hover эффекты */
+  .hover-tilt {
+    transition: transform 0.3s ease;
+  }
+  
+  .hover-tilt:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(5deg) scale3d(1.05, 1.05, 1.05);
+  }
+
+  /* Светящиеся границы */
+  .glow-border {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+                var(--gradient-primary) border-box;
+  }
+
+  /* Анимация появления текста */
+  .text-reveal {
+    background: linear-gradient(90deg, transparent 0%, hsl(var(--foreground)) 50%, transparent 100%);
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: text-reveal 2s ease-in-out forwards;
+  }
+
+  @keyframes text-reveal {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Морфинг формы */
+  .morphing-shape {
+    border-radius: 50% 20% 80% 30%;
+    animation: morph 8s ease-in-out infinite;
+  }
+
+  @keyframes morph {
+    0%, 100% { border-radius: 50% 20% 80% 30%; }
+    25% { border-radius: 30% 60% 20% 90%; }
+    50% { border-radius: 70% 30% 60% 40%; }
+    75% { border-radius: 40% 80% 30% 70%; }
+  }
+
+  /* Магнитный эффект */
+  .magnetic {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Волновая анимация */
+  .wave-animation {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wave-animation::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: wave 2s infinite;
+  }
+
+  @keyframes wave {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  /* Матричный дождь эффект */
+  .matrix-bg {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .matrix-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(147, 51, 234, 0.3) 1px, transparent 0);
+    background-size: 20px 20px;
+    animation: matrix-rain 10s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes matrix-rain {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+
+  /* Голографический эффект */
+  .holographic {
+    background: linear-gradient(45deg, 
+      hsl(var(--primary)) 0%,
+      hsl(var(--accent)) 25%,
+      hsl(var(--primary)) 50%,
+      hsl(var(--accent)) 75%,
+      hsl(var(--primary)) 100%);
+    background-size: 300% 300%;
+    animation: holographic 3s ease infinite;
+  }
+
+  @keyframes holographic {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Пульсирующий RGB эффект */
+  .rgb-pulse {
+    animation: rgb-pulse 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes rgb-pulse {
+    0% { filter: hue-rotate(0deg) saturate(1); }
+    100% { filter: hue-rotate(360deg) saturate(1.5); }
+  }
+
+  /* Hero анимации */
+  @keyframes hero-float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-20px) rotate(1deg); }
+    50% { transform: translateY(-10px) rotate(0deg); }
+    75% { transform: translateY(-15px) rotate(-1deg); }
+  }
+
+  @keyframes hero-glow {
+    0% { text-shadow: 0 0 20px hsl(0 0% 100% / 0.3), 0 0 40px hsl(0 0% 100% / 0.1); }
+    100% { text-shadow: 0 0 30px hsl(0 0% 100% / 0.6), 0 0 60px hsl(0 0% 100% / 0.3); }
+  }
+
+  @keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes blink {
+    0%, 50% { border-color: transparent; }
+    51%, 100% { border-color: hsl(var(--primary)); }
+  }
+
+  .typewriter {
+    overflow: hidden;
+    border-right: 2px solid hsl(var(--primary));
+    white-space: nowrap;
+    animation: typewriter 3s steps(20) 1s both, blink 1s infinite;
+  }
+
+  .hero-title {
+    animation: var(--hero-float), var(--hero-glow);
+  }
+
+  /* Скрытие скроллбара */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE и Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari и Opera */
+  }
+
+  /* Premium gradients */
+  .gradient-shift {
+    background: linear-gradient(270deg, #8b5cf6, #ec4899, #3b82f6, #8b5cf6);
+    background-size: 400% 400%;
+    animation: gradientShift 6s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Plan animations */
+  .plan-card-enter {
+    animation: planCardEnter 0.5s ease-out;
+  }
+
+  @keyframes planCardEnter {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Cosmic background */
+  .cosmic-bg {
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f17 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cosmic-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.2), transparent),
+      radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.1), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.3), transparent),
+      radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.2), transparent),
+      radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.1), transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    animation: twinkle 4s infinite;
+    pointer-events: none;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+}

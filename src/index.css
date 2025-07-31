@@ -15,6 +15,34 @@
 
 /* FlowCross Gaming Design System - Максимальная мощь HTML/CSS */
 
+/* Режим производительности и отключение анимаций */
+.performance-mode .glass-effect {
+  background: hsl(var(--card)) !important;
+  backdrop-filter: none !important;
+}
+
+.performance-mode [class*="blur"] {
+  backdrop-filter: none !important;
+}
+
+.performance-mode .glow-white,
+.performance-mode .neon-text,
+.performance-mode .hero-glow,
+.performance-mode .interactive-glow:hover {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Отключение анимаций */
+.no-animations *,
+.no-animations *::before,
+.no-animations *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
 @layer base {
   :root {
     /* Черно-белая тема с серыми акцентами */

@@ -28,6 +28,7 @@ interface AccountSideNavigationProps {
     verified?: boolean;
     loginTime: number;
   };
+  isLoggedIn?: boolean;
 }
 
 const menuItems = [
@@ -99,12 +100,19 @@ const supportItems = [
   }
 ];
 
-export function AccountSideNavigation({ currentSection, onSectionChange, onLogout, userData }: AccountSideNavigationProps) {
+export function AccountSideNavigation({ currentSection, onSectionChange, onLogout, userData, isLoggedIn = true }: AccountSideNavigationProps) {
   const isActive = (section: string) => currentSection === section;
 
   const handleSectionClick = (sectionId: string) => {
     onSectionChange(sectionId);
   };
+
+  // Определяем, какие разделы должны быть скрыты для неавторизованных пользователей
+  const hiddenSectionsForGuests = ["activity", "subscription", "downloads", "security", "profile"];
+  
+  const filteredMenuItems = isLoggedIn 
+    ? menuItems 
+    : menuItems.filter(item => !hiddenSectionsForGuests.includes(item.id));
 
   return (
     <div className="w-80 min-h-screen bg-black/80 backdrop-blur-xl border-r border-white/10 relative overflow-hidden">
@@ -150,7 +158,7 @@ export function AccountSideNavigation({ currentSection, onSectionChange, onLogou
             Аккаунт
           </h3>
           <div className="space-y-1">
-            {menuItems.map((item, index) => (
+            {filteredMenuItems.map((item, index) => (
               <button
                 key={item.id}
                 onClick={() => handleSectionClick(item.id)}

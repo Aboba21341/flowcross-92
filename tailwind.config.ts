@@ -88,6 +88,10 @@ export default {
 					'0%': { transform: 'translateX(100%)' },
 					'100%': { transform: 'translateX(0)' }
 				},
+				'slide-out-right': {
+					'0%': { transform: 'translateX(0)', opacity: '1' },
+					'100%': { transform: 'translateX(100%)', opacity: '0' }
+				},
 				'glow-pulse': {
 					'0%, 100%': { boxShadow: '0 0 20px hsl(0 0% 100% / 0.3)' },
 					'50%': { boxShadow: '0 0 40px hsl(0 0% 100% / 0.5), 0 0 60px hsl(0 0% 100% / 0.2)' }
@@ -118,6 +122,7 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.6s ease-out',
 				'slide-in-right': 'slide-in-right 0.5s ease-out',
+				'slide-out-right': 'slide-out-right 0.3s ease-in',
 				'glow-pulse': 'glow-pulse 6s ease-in-out infinite',
 				'float': 'float 8s ease-in-out infinite',
 				'gradient-shift': 'gradient-shift 12s ease infinite',

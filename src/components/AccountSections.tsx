@@ -257,41 +257,89 @@ export function AccountSections({
       );
 
     case "settings":
+      const [performanceMode, setPerformanceMode] = useState(() => {
+        return localStorage.getItem("flowcross_performance_mode") === "true";
+      });
+      const [animationsEnabled, setAnimationsEnabled] = useState(() => {
+        return localStorage.getItem("flowcross_animations") !== "false";
+      });
+
+      const handlePerformanceToggle = (enabled: boolean) => {
+        setPerformanceMode(enabled);
+        localStorage.setItem("flowcross_performance_mode", enabled.toString());
+        
+        const root = document.documentElement;
+        if (enabled) {
+          root.style.setProperty('--backdrop-blur', 'none');
+          root.style.setProperty('--glass-bg', 'hsl(var(--card))');
+          root.classList.add('performance-mode');
+        } else {
+          root.style.removeProperty('--backdrop-blur');
+          root.style.removeProperty('--glass-bg');
+          root.classList.remove('performance-mode');
+        }
+        
+        window.dispatchEvent(new CustomEvent('performance-mode-toggle', { detail: { enabled } }));
+        toast({
+          title: enabled ? "Режим производительности включен" : "Режим производительности выключен",
+          description: enabled ? "Визуальные эффекты упрощены" : "Все визуальные эффекты восстановлены"
+        });
+      };
+
+      const handleAnimationsToggle = (enabled: boolean) => {
+        setAnimationsEnabled(enabled);
+        localStorage.setItem("flowcross_animations", enabled.toString());
+        
+        const root = document.documentElement;
+        if (!enabled) {
+          root.classList.add('no-animations');
+        } else {
+          root.classList.remove('no-animations');
+        }
+        
+        window.dispatchEvent(new CustomEvent('animations-toggle', { detail: { enabled } }));
+        toast({
+          title: enabled ? "Анимации включены" : "Анимации отключены",
+          description: enabled ? "Все анимации восстановлены" : "Анимации отключены для повышения производительности"
+        });
+      };
+
       return (
         <div className="space-y-6">
           <div>
             <h2 className="text-2xl font-bold mb-2">Настройки</h2>
-            <p className="text-muted-foreground">Общие настройки приложения</p>
+            <p className="text-muted-foreground">Общие настройки приложения и производительности</p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Запуск приложения</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="w-5 h-5" />
+                  Производительность
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Автозапуск</p>
-                    <p className="text-sm text-muted-foreground">Запускать с Windows</p>
+                    <p className="font-medium">Режим производительности</p>
+                    <p className="text-sm text-muted-foreground">Убирает блюр, свечения и партиклы</p>
                   </div>
-                  <Switch />
+                  <Switch 
+                    checked={performanceMode}
+                    onCheckedChange={handlePerformanceToggle}
+                  />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Минимизировать в трей</p>
-                    <p className="text-sm text-muted-foreground">Скрывать в системный трей</p>
+                    <p className="font-medium">Анимации</p>
+                    <p className="text-sm text-muted-foreground">Включить/отключить все анимации</p>
                   </div>
-                  <Switch />
+                  <Switch 
+                    checked={animationsEnabled}
+                    onCheckedChange={handleAnimationsToggle}
+                  />
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Производительность</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Аппаратное ускорение</p>
@@ -299,12 +347,37 @@ export function AccountSections({
                   </div>
                   <Switch defaultChecked />
                 </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="w-5 h-5" />
+                  Общие настройки
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">Фоновые обновления</p>
                     <p className="text-sm text-muted-foreground">Обновлять моды автоматически</p>
                   </div>
                   <Switch defaultChecked />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">Автосохранение модпаков</p>
+                    <p className="text-sm text-muted-foreground">Сохранять изменения автоматически</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">Режим разработчика</p>
+                    <p className="text-sm text-muted-foreground">Дополнительные инструменты</p>
+                  </div>
+                  <Switch />
                 </div>
               </CardContent>
             </Card>
@@ -364,12 +437,58 @@ export function AccountSections({
       );
 
     case "subscription":
+      const [currentPlan, setCurrentPlan] = useState(() => {
+        return localStorage.getItem("flowcross_selected_plan") || "monthly";
+      });
+
+      const handlePlanChange = (planType: string) => {
+        setCurrentPlan(planType);
+        localStorage.setItem("flowcross_selected_plan", planType);
+        toast({
+          title: "План изменен",
+          description: `Выбран ${planType === "monthly" ? "месячный" : "годовой"} план`
+        });
+      };
+
       return (
         <div className="space-y-6">
           <div>
             <h2 className="text-2xl font-bold mb-2">Подписка</h2>
             <p className="text-muted-foreground">Управляйте вашим Premium статусом</p>
           </div>
+          
+          {/* Переключатель планов */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Crown className="w-5 h-5 text-yellow-500" />
+                Выбор плана
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-4">
+                <Button 
+                  variant={currentPlan === "monthly" ? "default" : "outline"}
+                  className="h-20 flex-col gap-2"
+                  onClick={() => handlePlanChange("monthly")}
+                >
+                  <div className="text-lg font-bold">$4.99/месяц</div>
+                  <div className="text-sm text-muted-foreground">Месячная подписка</div>
+                </Button>
+                <Button 
+                  variant={currentPlan === "yearly" ? "default" : "outline"}
+                  className="h-20 flex-col gap-2 relative"
+                  onClick={() => handlePlanChange("yearly")}
+                >
+                  <Badge className="absolute -top-2 -right-2 bg-green-500">
+                    Скидка 20%
+                  </Badge>
+                  <div className="text-lg font-bold">$47.99/год</div>
+                  <div className="text-sm text-muted-foreground">Годовая подписка</div>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
           
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
@@ -384,7 +503,9 @@ export function AccountSections({
                   <Badge className="mb-4 bg-gradient-to-r from-yellow-500 to-orange-500">
                     FLOW+ PREMIUM
                   </Badge>
-                  <p className="text-2xl font-bold mb-2">$4.99/месяц</p>
+                  <p className="text-2xl font-bold mb-2">
+                    {currentPlan === "monthly" ? "$4.99/месяц" : "$47.99/год"}
+                  </p>
                   <p className="text-sm text-muted-foreground mb-4">
                     Продление: 15 января 2025
                   </p>
@@ -428,15 +549,101 @@ export function AccountSections({
       );
 
     case "activity":
+      const daysRegistered = Math.max(1, Math.floor((Date.now() - userData.loginTime) / (1000 * 60 * 60 * 24)));
+      const currentLevel = Math.min(50, Math.floor(daysRegistered / 2) + 1);
+      const experiencePoints = daysRegistered * 250 + 500;
+      const nextLevelExp = (currentLevel + 1) * 1000;
+      const progressToNext = ((experiencePoints % 1000) / 1000) * 100;
+      
       return (
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold mb-2">Активность</h2>
-            <p className="text-muted-foreground">Статистика использования FlowCross</p>
+            <h2 className="text-2xl font-bold mb-2">Активность и Достижения</h2>
+            <p className="text-muted-foreground">Ваш прогресс и статистика использования FlowCross</p>
           </div>
           
-          {/* Реальная статистика на основе данных пользователя */}
-          <div className="grid md:grid-cols-3 gap-6">
+          {/* Уровень и опыт */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10"></div>
+              <CardHeader className="relative">
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-500" />
+                  Уровень и Опыт
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="relative">
+                <div className="text-center mb-4">
+                  <div className="text-4xl font-bold text-primary mb-2">
+                    Уровень {currentLevel}
+                  </div>
+                  <div className="text-lg text-muted-foreground">
+                    {experiencePoints.toLocaleString()} XP
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>До следующего уровня</span>
+                    <span>{Math.round(progressToNext)}%</span>
+                  </div>
+                  <Progress value={progressToNext} className="h-2" />
+                  <div className="text-xs text-muted-foreground mt-1 text-center">
+                    {1000 - (experiencePoints % 1000)} XP до уровня {currentLevel + 1}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Достижения */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Crown className="w-5 h-5 text-yellow-500" />
+                  Достижения
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                    <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+                      <Check className="w-4 h-4 text-green-500" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">Первый вход</p>
+                      <p className="text-xs text-muted-foreground">Добро пожаловать в FlowCross</p>
+                    </div>
+                  </div>
+                  
+                  {daysRegistered >= 7 && (
+                    <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                      <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
+                        <Calendar className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">Неделя с FlowCross</p>
+                        <p className="text-xs text-muted-foreground">7 дней активности</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {currentLevel >= 10 && (
+                    <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                      <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center">
+                        <Zap className="w-4 h-4 text-purple-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">Опытный пользователь</p>
+                        <p className="text-xs text-muted-foreground">Достигнут 10 уровень</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Статистика активности */}
+          <div className="grid md:grid-cols-4 gap-4">
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
@@ -445,7 +652,7 @@ export function AccountSections({
                   </div>
                   <div>
                     <p className="text-2xl font-bold">
-                      {Math.floor((Date.now() - userData.loginTime) / (1000 * 60 * 60 * 24)) * 15 + 247}
+                      {daysRegistered * 15 + 247}
                     </p>
                     <p className="text-sm text-muted-foreground">Загрузок модов</p>
                   </div>

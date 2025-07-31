@@ -142,6 +142,75 @@ const FlowCrossNavbar = () => {
 
           <div className="hidden md:flex items-center space-x-4">
             <SearchComponent />
+            
+            {/* Settings Button - Always visible */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="sm" className="p-2">
+                  <Settings className="w-5 h-5" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="glass-effect max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Settings className="w-5 h-5" />
+                    Настройки
+                  </DialogTitle>
+                </DialogHeader>
+                
+                <div className="space-y-6">
+                  {/* Performance Settings */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Zap className="w-5 h-5 text-primary" />
+                        <span className="text-sm font-medium">Режим производительности</span>
+                      </div>
+                      <Switch
+                        checked={performanceMode}
+                        onCheckedChange={handlePerformanceToggle}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground ml-8">
+                      Убирает блюр, свечения и партиклы для повышения производительности
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Sparkles className="w-5 h-5 text-primary" />
+                        <span className="text-sm font-medium">Анимации</span>
+                      </div>
+                      <Switch
+                        checked={animationsEnabled}
+                        onCheckedChange={handleAnimationsToggle}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground ml-8">
+                      Включить/отключить все анимации интерфейса
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Stars className="w-5 h-5 text-primary" />
+                        <span className="text-sm font-medium">Падающие звезды</span>
+                      </div>
+                      <Switch
+                        checked={starsEnabled}
+                        onCheckedChange={handleStarsToggle}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground ml-8">
+                      Включить анимацию падающих звезд на фоне
+                    </p>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+
             <Button 
               variant="outline" 
               size="sm" 
@@ -292,22 +361,6 @@ const FlowCrossNavbar = () => {
                     </div>
                   )}
 
-                  {/* Falling Stars Toggle */}
-                  <div className="border-t border-border pt-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <Stars className="w-5 h-5 text-primary" />
-                        <span className="text-sm font-medium">Падающие звезды</span>
-                      </div>
-                      <Switch
-                        checked={starsEnabled}
-                        onCheckedChange={handleStarsToggle}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Включить анимацию падающих звезд на фоне
-                    </p>
-                  </div>
 
                   {authMode !== "choice" && (
                     <div className="flex justify-center pt-4">
@@ -338,7 +391,9 @@ const FlowCrossNavbar = () => {
             />
             
             {/* Menu positioned under the button */}
-            <div className="absolute top-20 right-4 w-80 max-w-[calc(100vw-2rem)] glass-effect p-6 rounded-2xl border border-white/20 shadow-2xl backdrop-blur-xl animate-slide-in-right">
+            <div className={`absolute top-20 right-4 w-80 max-w-[calc(100vw-2rem)] glass-effect p-6 rounded-2xl border border-white/20 shadow-2xl backdrop-blur-xl transition-all duration-300 ${
+              isMobileMenuOpen ? 'animate-slide-in-right opacity-100 scale-100' : 'animate-slide-out-right opacity-0 scale-95'
+            }`}>
               {/* Close button */}
               <button
                 onClick={() => setIsMobileMenuOpen(false)}

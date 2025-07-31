@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Search, Menu, X, Download, LogIn, User, Settings, LogOut, Stars, Zap, Sparkles } from "lucide-react";
@@ -326,9 +327,8 @@ const FlowCrossNavbar = () => {
                           </div>
                           <div>
                             <Label htmlFor="password">Пароль</Label>
-                            <Input 
+                            <PasswordInput 
                               id="password" 
-                              type="password" 
                               value={loginData.password} 
                               onChange={(e) => setLoginData({...loginData, password: e.target.value})} 
                               placeholder="Введите пароль" 
@@ -392,7 +392,7 @@ const FlowCrossNavbar = () => {
             
             {/* Menu positioned under the button */}
             <div className={`absolute top-20 right-4 w-80 max-w-[calc(100vw-2rem)] glass-effect p-6 rounded-2xl border border-white/20 shadow-2xl backdrop-blur-xl transition-all duration-300 ${
-              isMobileMenuOpen ? 'animate-slide-in-right opacity-100 scale-100' : 'animate-slide-out-right opacity-0 scale-95'
+              isMobileMenuOpen ? 'animate-slide-in-right' : 'animate-slide-out-right'
             }`}>
               {/* Close button */}
               <button

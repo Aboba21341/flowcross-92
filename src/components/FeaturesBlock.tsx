@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Zap, Shield, Globe, Gamepad2, Users, Star, UserPlus, LogIn } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -113,9 +114,8 @@ const FeaturesBlock = () => {
               </div>
               <div>
                 <Label htmlFor="login-password">Пароль</Label>
-                <Input 
+                <PasswordInput 
                   id="login-password" 
-                  type="password" 
                   value={loginData.password} 
                   onChange={(e) => setLoginData({...loginData, password: e.target.value})} 
                   placeholder="Введите пароль" 
@@ -159,9 +159,8 @@ const FeaturesBlock = () => {
               </div>
               <div>
                 <Label htmlFor="reg-password">Пароль</Label>
-                <Input 
+                <PasswordInput 
                   id="reg-password" 
-                  type="password" 
                   value={registerData.password} 
                   onChange={(e) => setRegisterData({...registerData, password: e.target.value})} 
                   placeholder="Создайте пароль" 
@@ -169,9 +168,8 @@ const FeaturesBlock = () => {
               </div>
               <div>
                 <Label htmlFor="reg-confirm">Подтвердите пароль</Label>
-                <Input 
+                <PasswordInput 
                   id="reg-confirm" 
-                  type="password" 
                   value={registerData.confirmPassword} 
                   onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})} 
                   placeholder="Повторите пароль" 
